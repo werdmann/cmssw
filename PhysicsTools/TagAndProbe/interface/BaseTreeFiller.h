@@ -139,7 +139,7 @@ class BaseTreeFiller : boost::noncopyable {
         //                       and that can't mess up the addresses in the TTree.
 
         /// To be called once per event, to load possible external variables
-        void init(const edm::Event &iEvent) const ;
+        void init(const edm::Event &iEvent, const edm::EventSetup& iSetup) const ;
 
         /// To be called once per probe, to fill the values for this probe
         void fill(const reco::CandidateBaseRef &probe) const ;
@@ -171,6 +171,9 @@ class BaseTreeFiller : boost::noncopyable {
         /// Add branches with event variables: met, sum ET, .. etc.
 	bool addEventVariablesInfo_;
 
+	/// Add branches from centrality object
+	bool addCentralityInfo_;
+
         void addBranches_(TTree *tree, const edm::ParameterSet &iConfig, const std::string &branchNamePrefix="") ;
 
         //implementation notice: these two are 'mutable' because we will fill them from a 'const' method
@@ -183,6 +186,10 @@ class BaseTreeFiller : boost::noncopyable {
 
         mutable float mMET_,mSumET_,mMETSign_,mtcMET_,mtcSumET_,
 	  mtcMETSign_,mpfMET_,mpfSumET_,mpfMETSign_;
+
+	mutable int hiNtracks_, hiBin_, hiNpix_, hiNpixelTracks_;
+   	mutable float hiHF_, hiHFplus_, hiHFminus_, hiHFplusEta4_, hiHFminusEta4_, hiHFeta4_, hiZDC_, hiZDCplus_, hiZDCminus_, hiEEplus_, hiEEminus_, hiEE_, hiEB_, hiET_;
+
 };
 
 

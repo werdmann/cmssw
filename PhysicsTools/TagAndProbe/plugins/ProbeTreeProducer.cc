@@ -75,7 +75,7 @@ bool ProbeTreeProducer::filter(edm::Event& iEvent, const edm::EventSetup& iSetup
   edm::Handle<reco::CandidateView> probes;
   iEvent.getByLabel(probesTag_, probes);
   if(!probes.isValid()) return result;
-  probeFiller_->init(iEvent);
+  probeFiller_->init(iEvent, iSetup);
   // select probes and calculate the sorting value
   typedef std::pair<reco::CandidateBaseRef, double> Pair;
   std::vector<Pair> selectedProbes;

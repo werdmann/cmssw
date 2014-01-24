@@ -150,11 +150,11 @@ TagProbeFitTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup
     Handle<reco::CandidateView> src, allProbes;
     Handle<Association<vector<reco::GenParticle> > > tagMatches, probeMatches;
 
-    treeFiller_->init(iEvent); // read out info from the event if needed (external vars, list of passing probes, ...)
-    if (oldTagFiller_.get()) oldTagFiller_->init(iEvent);
-    if (tagFiller_.get())    tagFiller_->init(iEvent);
-    if (pairFiller_.get())   pairFiller_->init(iEvent);
-    if (mcFiller_.get())     mcFiller_->init(iEvent);
+    treeFiller_->init(iEvent, iSetup); // read out info from the event if needed (external vars, list of passing probes, ...)
+    if (oldTagFiller_.get()) oldTagFiller_->init(iEvent, iSetup);
+    if (tagFiller_.get())    tagFiller_->init(iEvent, iSetup);
+    if (pairFiller_.get())   pairFiller_->init(iEvent, iSetup);
+    if (mcFiller_.get())     mcFiller_->init(iEvent, iSetup);
 
     // on mc we want to load also the MC match info
     if (isMC_) {
@@ -188,7 +188,7 @@ TagProbeFitTreeProducer::analyze(const edm::Event& iEvent, const edm::EventSetup
         // read full collection of probes
         iEvent.getByLabel(allProbes_, allProbes);
         // init the tree filler
-        mcUnbiasFiller_->init(iEvent);
+        mcUnbiasFiller_->init(iEvent, iSetup);
         // loop on probes
         for (size_t i = 0, n = allProbes->size(); i < n; ++i) {
             const reco::CandidateBaseRef & probe = allProbes->refAt(i);

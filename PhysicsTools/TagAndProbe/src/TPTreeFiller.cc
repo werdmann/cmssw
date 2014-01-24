@@ -15,8 +15,8 @@ tnp::TPTreeFiller::TPTreeFiller(const edm::ParameterSet config) :
 
 tnp::TPTreeFiller::~TPTreeFiller() {}
 
-void tnp::TPTreeFiller::init(const edm::Event &iEvent) const {
-    tnp::BaseTreeFiller::init(iEvent);
+void tnp::TPTreeFiller::init(const edm::Event &iEvent, const edm::EventSetup& iSetup) const {
+    tnp::BaseTreeFiller::init(iEvent, iSetup);
 }
 
 void tnp::TPTreeFiller::fill(const reco::CandidateBaseRef &probe, double mass, bool mcTrue, float mcMass) const {

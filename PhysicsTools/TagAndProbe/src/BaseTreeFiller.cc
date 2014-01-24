@@ -14,7 +14,11 @@
 #include "PhysicsTools/TagAndProbe/interface/ColinsSoperVariables.h"
 
 #include "DataFormats/HeavyIonEvent/interface/Centrality.h"
+<<<<<<< HEAD
 #include "RecoHI/HiCentralityAlgos/interface/CentralityProvider.h"
+=======
+#include "DataFormats/HeavyIonEvent/interface/CentralityProvider.h"
+>>>>>>> e1ac391... tag and probe packages updated with heavy ion centrality variables
 
 #include <TList.h>
 #include <TObjString.h>
@@ -94,6 +98,30 @@ tnp::BaseTreeFiller::BaseTreeFiller(const char *name, const edm::ParameterSet iC
       tree_->Branch("event_BeamSpot_z"       ,&mBSz_              ,"mBSz/F");
     }
 
+    addCentralityInfo_ = iConfig.existsAs<bool>("addCentralityInfo") ? iConfig.getParameter<bool>("addCentralityInfo") : false;
+    if (addCentralityInfo_) {
+
+      tree_->Branch("event_hiBin"	,&hiBin_	,"hiBin/I");
+      tree_->Branch("event_hiHF"	,&hiHF_		,"hiHF/F");
+      tree_->Branch("event_hiHFplus"	,&hiHFplus_	,"hiHFplus/F");
+      tree_->Branch("event_hiHFminus"	,&hiHFminus_	,"hiHFminus/F");
+      tree_->Branch("event_hiHFeta4"	,&hiHFeta4_	,"hiHFeta4/F");
+      tree_->Branch("event_hiHFplusEta4" ,&hiHFplusEta4_ ,"hiHFplusEta4/F");
+      tree_->Branch("event_hiHFminusEta4" ,&hiHFminusEta4_ ,"hiHFminusEta4/F");
+      tree_->Branch("event_hiNtracks"	,&hiNtracks_	,"hiNtracks/I");
+      tree_->Branch("event_hiNpix"	,&hiNpix_	,"hiNpix/I");
+      tree_->Branch("event_hiNpixelTracks",&hiNpixelTracks_ ,"hiNpixelTracks/I");
+      tree_->Branch("event_hiZDC"	,&hiZDC_	,"hiZDC/F");
+      tree_->Branch("event_hiZDCplus"	,&hiZDCplus_	,"hiZDCplus/F");
+      tree_->Branch("event_hiZDCminus"	,&hiZDCminus_	,"hiZDCminus/F");
+      tree_->Branch("event_hiEEplus"	,&hiEEplus_	,"hiEEplus/F");
+      tree_->Branch("event_hiEEminus"	,&hiEEminus_	,"hiEEminus/F");
+      tree_->Branch("event_hiEE"	,&hiEE_		,"hiEE/F");
+      tree_->Branch("event_hiEB"	,&hiEB_		,"hiEB/F");
+      tree_->Branch("event_hiET"	,&hiET_		,"hiET/F");
+
+    }
+
     ignoreExceptions_ = iConfig.existsAs<bool>("ignoreExceptions") ? iConfig.getParameter<bool>("ignoreExceptions") : false;
 }
 
@@ -144,7 +172,7 @@ tnp::BaseTreeFiller::addBranches_(TTree *tree, const edm::ParameterSet &iConfig,
 
 tnp::BaseTreeFiller::~BaseTreeFiller() { }
 
-void tnp::BaseTreeFiller::init(const edm::Event &iEvent) const {
+void tnp::BaseTreeFiller::init(const edm::Event &iEvent, const edm::EventSetup& iSetup) const {
     run_  = iEvent.id().run();
     lumi_ = iEvent.id().luminosityBlock();
     event_ = iEvent.id().event(); 
@@ -243,6 +271,37 @@ void tnp::BaseTreeFiller::init(const edm::Event &iEvent) const {
           mpfSumET_ = (*pfmet)[0].sumEt();
           mpfMETSign_ = (*pfmet)[0].significance();
         }
+    }
+
+    if (addCentralityInfo_) {
+      CentralityProvider *centProvider = new CentralityProvider(iSetup);
+ 
+      //make sure you do this first in every event
+      centProvider->newEvent(iEvent,iSetup);
+      const reco::Centrality* centrality = centProvider->raw();
+
+      hiBin_ = centProvider->getBin();
+      hiNtracks_ = centrality->Ntracks();
+      hiNpix_ = centrality->multiplicityPixel();
+      hiNpixelTracks_ = centrality->NpixelTracks();
+   
+      hiHF_ = centrality->EtHFtowerSum();
+      hiHFplus_ = centrality->EtHFtowerSumPlus();
+      hiHFminus_ = centrality->EtHFtowerSumMinus();
+      hiHFplusEta4_ = centrality->EtHFtruncatedPlus();
+      hiHFminusEta4_ = centrality->EtHFtruncatedMinus();
+      hiHFeta4_ = hiHFplusEta4_ + hiHFminusEta4_;
+
+      hiZDC_ = centrality->zdcSum();
+      hiZDCplus_ = centrality->zdcSumPlus();
+      hiZDCminus_ = centrality->zdcSumMinus();
+   
+      hiEEplus_ = centrality->EtEESumPlus();
+      hiEEminus_ = centrality->EtEESumMinus();
+      hiEE_ = centrality->EtEESum();
+      hiEB_ = centrality->EtEBSum();
+      hiET_ = centrality->EtMidRapiditySum();
+
     }
 
 }
