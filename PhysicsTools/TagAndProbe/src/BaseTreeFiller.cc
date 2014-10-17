@@ -14,11 +14,8 @@
 #include "PhysicsTools/TagAndProbe/interface/ColinsSoperVariables.h"
 
 #include "DataFormats/HeavyIonEvent/interface/Centrality.h"
-<<<<<<< HEAD
 #include "RecoHI/HiCentralityAlgos/interface/CentralityProvider.h"
-=======
-#include "DataFormats/HeavyIonEvent/interface/CentralityProvider.h"
->>>>>>> e1ac391... tag and probe packages updated with heavy ion centrality variables
+#include "RecoHI/HiCentralityAlgos/interface/CentralityProvider.h"
 
 #include <TList.h>
 #include <TObjString.h>
