@@ -13,6 +13,9 @@
 #include "DataFormats/BeamSpot/interface/BeamSpot.h"
 #include "PhysicsTools/TagAndProbe/interface/ColinsSoperVariables.h"
 
+#include "DataFormats/HeavyIonEvent/interface/Centrality.h"
+#include "RecoHI/HiCentralityAlgos/interface/CentralityProvider.h"
+
 #include <TList.h>
 #include <TObjString.h>
 
