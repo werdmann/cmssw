@@ -133,7 +133,7 @@ def overrideCentrality(process):
              ),
 
         cms.PSet(record = cms.string("HeavyIonRcd"),
-                 tag = cms.string("CentralityTable_HFtowers200_Glauber2010A_v5315x01_offline"),
+                 tag = cms.string("CentralityTable_HFtowers200_Glauber2010A_v5315x02_offline"),
                  connect = cms.untracked.string("frontier://FrontierProd/CMS_COND_31X_PHYSICSTOOLS"),
                  label = cms.untracked.string("HFtowers")
              ),
