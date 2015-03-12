@@ -10,13 +10,8 @@ class TPTreeFiller : public BaseTreeFiller {
         ~TPTreeFiller();
 
         // We declare 'const' the methods which don't change the configuration
-<<<<<<< HEAD
-        void init(const edm::Event &iEvent) const ;
-        void fill(const reco::CandidateBaseRef &probe, double mass, bool mcTrue=false, float mcMass=0.0) const ;
-=======
         void init(const edm::Event &iEvent, const edm::EventSetup& iSetup) const ;
-        void fill(const reco::CandidateBaseRef &probe, double mass, bool mcTrue=false) const ;
->>>>>>> e1ac391... tag and probe packages updated with heavy ion centrality variables
+        void fill(const reco::CandidateBaseRef &probe, double mass, bool mcTrue=false,float mcMass=0.0) const ;
 
     protected:
         /// extra branch for the mass
