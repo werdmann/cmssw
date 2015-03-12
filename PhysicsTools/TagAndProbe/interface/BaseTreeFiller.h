@@ -139,7 +139,7 @@ class BaseTreeFiller : boost::noncopyable {
         //                       and that can't mess up the addresses in the TTree.
 
         /// To be called once per event, to load possible external variables
-        void init(const edm::Event &iEvent) const ;
+        void init(const edm::Event &iEvent, const edm::EventSetup& iSetup) const ;
 
         /// To be called once per probe, to fill the values for this probe
         void fill(const reco::CandidateBaseRef &probe) const ;
@@ -147,6 +147,7 @@ class BaseTreeFiller : boost::noncopyable {
         /// Write a string dump of this PSet into the TTree header.
         /// see macro in test directory for how to retrieve it from the output root file
         void writeProvenance(const edm::ParameterSet &pset) const ;
+
     protected:
 
         std::vector<ProbeVariable> vars_;
@@ -156,27 +157,39 @@ class BaseTreeFiller : boost::noncopyable {
         enum WeightMode { None, Fixed, External };
         WeightMode weightMode_;
         edm::InputTag weightSrc_;
+	edm::InputTag PUweightSrc_;
 
         /// Ignore exceptions when evaluating variables
         bool ignoreExceptions_;
 
-        /// Add branches with run and lumisection number
+      /// Add branches with run and lumisection number
         bool addRunLumiInfo_;
+
+	/// Store Pileup weight when running over Monte Carlo
+	bool storePUweight_;
 
         /// Add branches with event variables: met, sum ET, .. etc.
 	bool addEventVariablesInfo_;
+
+	/// Add branches from centrality object
+	bool addCentralityInfo_;
 
         void addBranches_(TTree *tree, const edm::ParameterSet &iConfig, const std::string &branchNamePrefix="") ;
 
         //implementation notice: these two are 'mutable' because we will fill them from a 'const' method
         mutable TTree * tree_;
         mutable float weight_;
+        mutable float PUweight_;
         mutable uint32_t run_, lumi_, event_, mNPV_;
 
         mutable float mPVx_,mPVy_,mPVz_,mBSx_,mBSy_,mBSz_; 
 
         mutable float mMET_,mSumET_,mMETSign_,mtcMET_,mtcSumET_,
 	  mtcMETSign_,mpfMET_,mpfSumET_,mpfMETSign_;
+
+	mutable int hiNtracks_, hiBin_, hiNpix_, hiNpixelTracks_;
+   	mutable float hiHF_, hiHFplus_, hiHFminus_, hiHFplusEta4_, hiHFminusEta4_, hiHFeta4_, hiZDC_, hiZDCplus_, hiZDCminus_, hiEEplus_, hiEEminus_, hiEE_, hiEB_, hiET_;
+
 };
 
 
