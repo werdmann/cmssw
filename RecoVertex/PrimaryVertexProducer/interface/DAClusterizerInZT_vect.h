@@ -235,7 +235,7 @@ public:
   
   double beta0(const double betamax, track_t const & tks, vertex_t const & y) const;
     
-  double get_Tc(vertex_t & y, int k) const;
+  double get_Tc(const vertex_t & y, int k) const;
   
 private:
   bool verbose_;
